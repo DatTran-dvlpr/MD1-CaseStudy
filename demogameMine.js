@@ -138,34 +138,34 @@ function revealBoard(){
 }
 function checkWin(){
     if(safe){
-        alert("You Win!");
+        let x = '<iframe src="https://giphy.com/embed/yJFeycRK2DB4c" width="480" height="384" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>';
+        document.getElementById("gif").innerHTML = x;
         revealBoard();
+        alert("You Win!");
         cnt++;
         if(cnt==level.length){
             alert("You are genius! Now turn off the computer and save the world!");
-            let x = '<iframe src="https://giphy.com/embed/yJFeycRK2DB4c" width="480" height="384" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>';
-            document.getElementById("display").innerHTML = x;
             document.getElementById("nextLevel").innerHTML = "Looking for what? There's no next level!";
             return 1;
         }
-        let a = confirm("Next Level?");
-        if(a){
-            let x = '<button onClick="nextLevel('+ level[cnt] +')">Begin Next Level</button>';
-            document.getElementById("nextLevel").innerHTML = x;
-        }
+        let y = '<button onClick="nextLevel('+ level[cnt] +')">Begin Next Level</button>';
+        document.getElementById("nextLevel").innerHTML = y;
     }
     else{
-        alert("Boom! You're dead!");
         let a = '<iframe src="https://giphy.com/embed/3o85xnoIXebk3xYx4Q" width="480" height="270" frameBorder="0" className="giphy-embed" allowFullScreen></iframe>'
-        document.getElementById("display").innerHTML = a;
+        document.getElementById("gif").innerHTML = a;
+        revealBoard();
+        alert("Boom! You're dead!");
     }
     safe = true;
 }
 function nextLevel(x){
     setGame(x);
     document.getElementById("nextLevel").innerHTML = '';
+    document.getElementById("gif").innerHTML = '';
 }
 function restartGame(){
+    document.getElementById("gif").innerHTML = '';
     cnt=0;
     setGame(level[cnt]);
 }

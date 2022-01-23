@@ -4,7 +4,7 @@ let arrvalue =[];
 let display ="";
 let safe = true;
 let safespot = 64;
-let level =[9,8.5,8,7.5,7,6.5];
+let level =[9,8.5,8,8,7.5,6.5];
 let cnt =0;
 
 function createBoard() {
@@ -144,7 +144,6 @@ function checkWin(){
         alert("You Win!");
         cnt++;
         if(cnt==level.length){
-            alert("You are genius! Now turn off the computer and save the world!");
             document.getElementById("nextLevel").innerHTML = "Looking for what? There's no next level!";
             return 1;
         }

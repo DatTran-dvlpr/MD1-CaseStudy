@@ -3,16 +3,25 @@ let arr2=[];
 let arrvalue =[];
 let display ="";
 let safe = true;
-let safespot = 64;
+let numb = 8;
+let safespot = numb*numb;
 let level =[9,8.5,8,8,7.5,6.5];
 let cnt =0;
 
+function setNumbBlock(x){
+    numb = x;
+}
+function customGame(){
+    let a = +prompt('Nhập số "a" để tạo bảng trò chơi với kích cỡ aXa:');
+    setNumbBlock(a);
+    restartGame();
+}
 function createBoard() {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < numb; i++) {
         arr[i] = [];
         arr2[i]=[];
-        for (let j = 0; j < 8; j++) {
-            arr[i][j] = '<input type="button" id="no' + i + j + '" value=" " oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
+        for (let j = 0; j < numb; j++) {
+            arr[i][j] = '<input type="button" id="no' + i + j + '" value="  " oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
             arr2[i][j]= 9;
         }
     }
@@ -21,19 +30,19 @@ function createBoard() {
 function flag(i,j){
     let y = "no"+i+j;
     let x = document.getElementById(y).value;
-    if(x==' '){
+    if(x=='  '){
         arr[i][j] = '<input type="button" id="no' + i + j + '" value="&#10067" oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
         drawBoard();
     }
     else{
-        arr[i][j] = '<input type="button" id="no' + i + j + '" value=" " oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
+        arr[i][j] = '<input type="button" id="no' + i + j + '" value="  " oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
         drawBoard();
     }
 }
 function setBoom(x) {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < numb; i++) {
         arrvalue[i] = []
-        for (let j = 0; j < 8; j++) {
+        for (let j = 0; j < numb; j++) {
             let a = Math.random() * 10;
             if (a > x) {
                 arrvalue[i][j] = '&#128163';
@@ -47,8 +56,8 @@ function setBoom(x) {
     }
 }
 function setNumAfterBoom() {
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
+    for (let i = 0; i < numb; i++) {
+        for (let j = 0; j < numb; j++) {
             setNum(i,j);
         }
     }
@@ -57,18 +66,18 @@ function setNum(i,j){
     if (arrvalue[i][j] != '&#128163') {
         if(i-1>=0&&j-1>=0){if(arrvalue[i-1][j-1] == '&#128163'){arrvalue[i][j]++;}}
         if(i-1>=0){if(arrvalue[i-1][j] == '&#128163'){arrvalue[i][j]++;}}
-        if(i-1>=0&&j+1<8){if(arrvalue[i-1][j+1] == '&#128163'){arrvalue[i][j]++;}}
+        if(i-1>=0&&j+1<numb){if(arrvalue[i-1][j+1] == '&#128163'){arrvalue[i][j]++;}}
         if(j-1>=0){if(arrvalue[i][j-1] == '&#128163'){arrvalue[i][j]++;}}
-        if(j+1<8)if(arrvalue[i][j+1] == '&#128163'){arrvalue[i][j]++;}
-        if(i+1<8&&j-1>=0){if(arrvalue[i+1][j-1] == '&#128163'){arrvalue[i][j]++;}}
-        if(i+1<8)if(arrvalue[i+1][j] == '&#128163'){arrvalue[i][j]++;}
-        if(i+1<8&&j+1<8)if(arrvalue[i+1][j+1] == '&#128163'){arrvalue[i][j]++;}
+        if(j+1<numb)if(arrvalue[i][j+1] == '&#128163'){arrvalue[i][j]++;}
+        if(i+1<numb&&j-1>=0){if(arrvalue[i+1][j-1] == '&#128163'){arrvalue[i][j]++;}}
+        if(i+1<numb)if(arrvalue[i+1][j] == '&#128163'){arrvalue[i][j]++;}
+        if(i+1<numb&&j+1<numb)if(arrvalue[i+1][j+1] == '&#128163'){arrvalue[i][j]++;}
     }
 }
 
 function setGame(x){
     display ="";
-    safespot = 64;
+    safespot = numb*numb;
     let lv = '';
     if(cnt==5){
         lv = "Level Hell";
@@ -80,8 +89,8 @@ function setGame(x){
     setBoom(x);
     setNumAfterBoom();
     createBoard();
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j <8; j++) {
+    for (let i = 0; i < numb; i++) {
+        for (let j = 0; j <numb; j++) {
             if(arrvalue[i][j]%2==1){
                 clickFunction(i,j);
                 return 1;
@@ -91,9 +100,9 @@ function setGame(x){
 }
 function drawBoard(){
     display ="<table border='0' cellspacing='0' cellpadding='0'>";
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < numb; i++) {
         display+="<tr>";
-        for (let j = 0; j < 8; j++) {
+        for (let j = 0; j < numb; j++) {
             display += "<td>"+arr[i][j]+"</td>";
         }
         display += "</tr>";
@@ -124,23 +133,23 @@ function clickAction(a,b){
     if(arrvalue[a][b]==0){
         if(a-1>=0&&b-1>=0){clickFunction(a-1,b-1);}
         if(a-1>=0){clickFunction(a-1,b);}
-        if(a-1>=0&&b+1<8){clickFunction(a-1,b+1);}
+        if(a-1>=0&&b+1<numb){clickFunction(a-1,b+1);}
         if(b-1>=0){clickFunction(a,b-1);}
-        if(b+1<8){clickFunction(a,b+1);}
-        if(a+1<8&&b-1>=0){clickFunction(a+1,b-1);}
-        if(a+1<8){clickFunction(a+1,b);}
-        if(a+1<8&&b+1<8){clickFunction(a+1,b+1);}
+        if(b+1<numb){clickFunction(a,b+1);}
+        if(a+1<numb&&b-1>=0){clickFunction(a+1,b-1);}
+        if(a+1<numb){clickFunction(a+1,b);}
+        if(a+1<numb&&b+1<numb){clickFunction(a+1,b+1);}
     }
 }
 function revealBoard(){
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr.length; j++) {
+    for (let i = 0; i < numb; i++) {
+        for (let j = 0; j < numb; j++) {
             arr[i][j]='<input type="button" value="'+arrvalue[i][j]+'"/>'
         }
     }
     display ="";
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
+    for (let i = 0; i < numb; i++) {
+        for (let j = 0; j < numb; j++) {
             display += arr[i][j];
         }
         display += "<br/>";

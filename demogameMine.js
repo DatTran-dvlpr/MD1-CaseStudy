@@ -12,17 +12,23 @@ function createBoard() {
         arr[i] = [];
         arr2[i]=[];
         for (let j = 0; j < 8; j++) {
-            arr[i][j] = '<input type="button" value=" " onClick="clickAction(' + i + ',' + j + ')"/>';
+            arr[i][j] = '<input type="button" id="no' + i + j + '" value=" " oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
             arr2[i][j]= 9;
         }
     }
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-            display += arr[i][j];
-        }
-        display += "<br/>";
+    drawBoard();
+}
+function flag(i,j){
+    let y = "no"+i+j;
+    let x = document.getElementById(y).value;
+    if(x==' '){
+        arr[i][j] = '<input type="button" id="no' + i + j + '" value="&#10067" oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
+        drawBoard();
     }
-    document.getElementById("display").innerHTML = display;
+    else{
+        arr[i][j] = '<input type="button" id="no' + i + j + '" value=" " oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
+        drawBoard();
+    }
 }
 function setBoom(x) {
     for (let i = 0; i < 8; i++) {
@@ -30,7 +36,7 @@ function setBoom(x) {
         for (let j = 0; j < 8; j++) {
             let a = Math.random() * 10;
             if (a > x) {
-                arrvalue[i][j] = '&#9827';
+                arrvalue[i][j] = '&#128163';
                 safespot--;
                 console.log(safespot)
             }
@@ -48,15 +54,15 @@ function setNumAfterBoom() {
     }
 }
 function setNum(i,j){
-    if (arrvalue[i][j] != '&#9827') {
-        if(i-1>=0&&j-1>=0){if(arrvalue[i-1][j-1] == '&#9827'){arrvalue[i][j]++;}}
-        if(i-1>=0){if(arrvalue[i-1][j] == '&#9827'){arrvalue[i][j]++;}}
-        if(i-1>=0&&j+1<8){if(arrvalue[i-1][j+1] == '&#9827'){arrvalue[i][j]++;}}
-        if(j-1>=0){if(arrvalue[i][j-1] == '&#9827'){arrvalue[i][j]++;}}
-        if(j+1<8)if(arrvalue[i][j+1] == '&#9827'){arrvalue[i][j]++;}
-        if(i+1<8&&j-1>=0){if(arrvalue[i+1][j-1] == '&#9827'){arrvalue[i][j]++;}}
-        if(i+1<8)if(arrvalue[i+1][j] == '&#9827'){arrvalue[i][j]++;}
-        if(i+1<8&&j+1<8)if(arrvalue[i+1][j+1] == '&#9827'){arrvalue[i][j]++;}
+    if (arrvalue[i][j] != '&#128163') {
+        if(i-1>=0&&j-1>=0){if(arrvalue[i-1][j-1] == '&#128163'){arrvalue[i][j]++;}}
+        if(i-1>=0){if(arrvalue[i-1][j] == '&#128163'){arrvalue[i][j]++;}}
+        if(i-1>=0&&j+1<8){if(arrvalue[i-1][j+1] == '&#128163'){arrvalue[i][j]++;}}
+        if(j-1>=0){if(arrvalue[i][j-1] == '&#128163'){arrvalue[i][j]++;}}
+        if(j+1<8)if(arrvalue[i][j+1] == '&#128163'){arrvalue[i][j]++;}
+        if(i+1<8&&j-1>=0){if(arrvalue[i+1][j-1] == '&#128163'){arrvalue[i][j]++;}}
+        if(i+1<8)if(arrvalue[i+1][j] == '&#128163'){arrvalue[i][j]++;}
+        if(i+1<8&&j+1<8)if(arrvalue[i+1][j+1] == '&#128163'){arrvalue[i][j]++;}
     }
 }
 
@@ -83,6 +89,18 @@ function setGame(x){
         }
     }
 }
+function drawBoard(){
+    display ="<table border='0' cellspacing='0' cellpadding='0'>";
+    for (let i = 0; i < 8; i++) {
+        display+="<tr>";
+        for (let j = 0; j < 8; j++) {
+            display += "<td>"+arr[i][j]+"</td>";
+        }
+        display += "</tr>";
+    }
+    display+='</table>';
+    document.getElementById("display").innerHTML = display;
+}
 function clickFunction(a,b){
     if(arr2[a][b]==arrvalue[a][b]){
         return 1;
@@ -90,16 +108,9 @@ function clickFunction(a,b){
     safespot--;
     console.log(safespot);
     arr[a][b]='<input type="button" value="'+arrvalue[a][b]+'"/>';
-    display ="";
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-            display += arr[i][j];
-        }
-        display += "<br/>";
-    }
-    document.getElementById("display").innerHTML = display;
+    drawBoard();
     arr2[a][b] = arrvalue[a][b];
-    if(arrvalue[a][b]=='&#9827'){
+    if(arrvalue[a][b]=='&#128163'){
         safe = false;
         checkWin();
         return 1;

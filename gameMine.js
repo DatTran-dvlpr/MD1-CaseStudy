@@ -156,14 +156,7 @@ function revealBoard(){
             }
         }
     }
-    display ="";
-    for (let i = 0; i < numb; i++) {
-        for (let j = 0; j < numb; j++) {
-            display += arr[i][j];
-        }
-        display += "<br/>";
-    }
-    document.getElementById("display").innerHTML = display;
+    drawBoard();
 }
 function checkWin(){
     if(safe){

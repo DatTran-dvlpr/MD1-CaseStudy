@@ -9,49 +9,11 @@ let safespot = numb*numb;
 let level =[9,8.5,8,8,7.5,6.5];
 let cnt =0;
 let boomIcon = '&#127879;';
+let numbOfBoom=0;
 let progressSound;
 
 function setNumbBlock(x){
     numb = x;
-}
-function customGameCampaign(){
-    mode=true;
-    let a = +prompt('Nhập số "a" để tạo bảng trò chơi,thể loại campaign, kích cỡ "aXa".');
-    setNumbBlock(a);
-    restartGame();
-}
-function customGameCustom(){
-    mode=false;
-    let a = +prompt('Nhập số "a" để tạo bảng trò chơi,thể loại custom, kích cỡ "aXa".');
-    setNumbBlock(a);
-    restartGame();
-    let b = +prompt('Nhập số 1,2,3,69 tương ứng với mức độ dễ, trung bình, khó và MỨC DẠI.');
-    let lv='';
-    if(b==1){
-        cnt=0;
-        setGame(level[cnt]);
-        lv ='Easy Mode';
-        document.getElementById("level").innerHTML = lv;
-        return 1;
-    }
-    if(b==2){
-        cnt=1;
-        setGame(level[cnt]);
-        lv ='Normal Mode';
-        document.getElementById("level").innerHTML = lv;
-        return 1;
-    }
-    if(b==3){
-        cnt=2;
-        setGame(level[cnt]);
-        lv ='Hard Mode';
-        document.getElementById("level").innerHTML = lv;
-        return 1;
-    }
-    cnt=level.length-1;
-    setGame(level[cnt]);
-    lv ='What the Hell is this Mode!?';
-    document.getElementById("level").innerHTML = lv;
 }
 function createBoard() {
     for (let i = 0; i < numb; i++) {
@@ -84,6 +46,7 @@ function setBoom(x) {
             if (a > x) {
                 arrvalue[i][j] = boomIcon;
                 safespot--;
+                numbOfBoom++;
                 console.log(safespot);
             }
             else {
@@ -114,6 +77,7 @@ function setNum(i,j){
 function setGame(x){
     display ="";
     safespot = numb*numb;
+    numbOfBoom=0;
     let lv = '';
     if(cnt==5){
         lv = "Level Hell";
@@ -202,12 +166,17 @@ function checkWin(){
         clearTimeout(progressSound);
         playCompleteSound();
         alert("You Win!");
+
         cnt++;
         if(cnt==level.length){
+            playerName.CampaignGame.updateScoreCam(numbOfBoom);
+            playerName.CampaignGame.updateFinalScoreCam();
+            displayScore();
             document.getElementById("nextLevel").innerHTML = "Looking for what? There's no next level!";
             return 1;
         }
         if(mode){
+            playerName.CampaignGame.updateScoreCam(numbOfBoom);
             let y = '<button style="width: 200px;height: 40px;background-color: darkred;color: white;font-size: 20px" onClick="nextLevel('+ level[cnt] +')"><b>Begin Next Level</b></button>';
             document.getElementById("nextLevel").innerHTML = y;
         }
@@ -223,6 +192,12 @@ function checkWin(){
         alert("Boom! You're dead!");
     }
     safe = true;
+}
+function displayScore(){
+    if(mode){
+        display ="Player: "+playerName+"<br/>Mode: Campaign-"+numb+'x'+numb+'<br/>Highscore: '+
+            playerName.CampaignGame.scoreCampaign;
+    }
 }
 function nextLevel(x){
     setGame(x);
@@ -240,5 +215,3 @@ function restartGame(){
         setGame(level[cnt]);
     }
 }
-
-setGame(level[cnt]);

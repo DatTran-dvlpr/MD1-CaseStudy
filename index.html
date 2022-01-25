@@ -11,6 +11,7 @@
             text-align: center;
         }
     </style>
+
 </head>
 <body>
 <h1>Minesweeper Shoppee</h1>
@@ -18,13 +19,18 @@
 <span id="score"></span>
 <div id="display"></div>
 <br/>
-<button onclick="restartGame(level[0])">RestartGame</button>
 <div id="nextLevel"></div>
+<button onclick="restartGame()">RestartGame</button>
 <button onclick="customGameCampaign()">SelectCampaign</button>
 <button onclick="customGameCustom()">GameCustom</button>
 <div id="gif"></div>
-<script src="gameMine.js"></script>
+<script src="ClassPlayer.js"></script>
+<script src="ClassCustom.js"></script>
+<script src="ClassCampaign.js"></script>
+<script src="core.js"></script>
 <script src="soundMine.js"></script>
+<script src="Operation.js"></script>
+
 
 </body>
 </html>

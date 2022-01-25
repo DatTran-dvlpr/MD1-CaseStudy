@@ -1,0 +1,2 @@
+setGame(level[cnt]);
+

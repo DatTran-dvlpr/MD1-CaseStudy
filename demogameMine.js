@@ -7,6 +7,8 @@ let numb = 8;
 let safespot = numb*numb;
 let level =[9,8.5,8,8,7.5,6.5];
 let cnt =0;
+let boomIcon = '&#127879;'
+
 
 function setNumbBlock(x){
     numb = x;
@@ -31,7 +33,7 @@ function flag(i,j){
     let y = "no"+i+j;
     let x = document.getElementById(y).value;
     if(x=='  '){
-        arr[i][j] = '<input type="button" id="no' + i + j + '" value="&#10067" oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
+        arr[i][j] = '<input style="font-size: 20px" type="button" id="no' + i + j + '" value="&#10067" oncontextmenu="flag(' + i + ',' + j + ')" onClick="clickAction(' + i + ',' + j + ')"/>';
         drawBoard();
     }
     else{
@@ -45,7 +47,7 @@ function setBoom(x) {
         for (let j = 0; j < numb; j++) {
             let a = Math.random() * 10;
             if (a > x) {
-                arrvalue[i][j] = '&#128163';
+                arrvalue[i][j] = boomIcon;
                 safespot--;
                 console.log(safespot)
             }
@@ -63,15 +65,15 @@ function setNumAfterBoom() {
     }
 }
 function setNum(i,j){
-    if (arrvalue[i][j] != '&#128163') {
-        if(i-1>=0&&j-1>=0){if(arrvalue[i-1][j-1] == '&#128163'){arrvalue[i][j]++;}}
-        if(i-1>=0){if(arrvalue[i-1][j] == '&#128163'){arrvalue[i][j]++;}}
-        if(i-1>=0&&j+1<numb){if(arrvalue[i-1][j+1] == '&#128163'){arrvalue[i][j]++;}}
-        if(j-1>=0){if(arrvalue[i][j-1] == '&#128163'){arrvalue[i][j]++;}}
-        if(j+1<numb)if(arrvalue[i][j+1] == '&#128163'){arrvalue[i][j]++;}
-        if(i+1<numb&&j-1>=0){if(arrvalue[i+1][j-1] == '&#128163'){arrvalue[i][j]++;}}
-        if(i+1<numb)if(arrvalue[i+1][j] == '&#128163'){arrvalue[i][j]++;}
-        if(i+1<numb&&j+1<numb)if(arrvalue[i+1][j+1] == '&#128163'){arrvalue[i][j]++;}
+    if (arrvalue[i][j] != boomIcon) {
+        if(i-1>=0&&j-1>=0){if(arrvalue[i-1][j-1] == boomIcon){arrvalue[i][j]++;}}
+        if(i-1>=0){if(arrvalue[i-1][j] == boomIcon){arrvalue[i][j]++;}}
+        if(i-1>=0&&j+1<numb){if(arrvalue[i-1][j+1] == boomIcon){arrvalue[i][j]++;}}
+        if(j-1>=0){if(arrvalue[i][j-1] == boomIcon){arrvalue[i][j]++;}}
+        if(j+1<numb)if(arrvalue[i][j+1] == boomIcon){arrvalue[i][j]++;}
+        if(i+1<numb&&j-1>=0){if(arrvalue[i+1][j-1] == boomIcon){arrvalue[i][j]++;}}
+        if(i+1<numb)if(arrvalue[i+1][j] == boomIcon){arrvalue[i][j]++;}
+        if(i+1<numb&&j+1<numb)if(arrvalue[i+1][j+1] == boomIcon){arrvalue[i][j]++;}
     }
 }
 
@@ -119,7 +121,7 @@ function clickFunction(a,b){
     arr[a][b]='<input type="button" value="'+arrvalue[a][b]+'"/>';
     drawBoard();
     arr2[a][b] = arrvalue[a][b];
-    if(arrvalue[a][b]=='&#128163'){
+    if(arrvalue[a][b]== boomIcon){
         safe = false;
         checkWin();
         return 1;
@@ -144,7 +146,12 @@ function clickAction(a,b){
 function revealBoard(){
     for (let i = 0; i < numb; i++) {
         for (let j = 0; j < numb; j++) {
-            arr[i][j]='<input type="button" value="'+arrvalue[i][j]+'"/>'
+            if(arrvalue[i][j]==boomIcon){
+                arr[i][j]='<input style="font-size: 20px" type="button" value="'+arrvalue[i][j]+'"/>'
+            }
+            else {
+                arr[i][j]='<input type="button" value="'+arrvalue[i][j]+'"/>';
+            }
         }
     }
     display ="";

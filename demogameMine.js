@@ -14,7 +14,7 @@ function setNumbBlock(x){
     numb = x;
 }
 function customGame(){
-    let a = +prompt('Nhập số "a" để tạo bảng trò chơi với kích cỡ aXa:');
+    let a = +prompt('Nhập số "a" để tạo bảng trò chơi với kích cỡ "aXa":');
     setNumbBlock(a);
     restartGame();
 }
@@ -168,13 +168,13 @@ function checkWin(){
         let x = '<iframe src="https://giphy.com/embed/yJFeycRK2DB4c" width="480" height="384" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>';
         document.getElementById("gif").innerHTML = x;
         revealBoard();
-        alert("You Win!");
+       alert("You Win!");
         cnt++;
         if(cnt==level.length){
             document.getElementById("nextLevel").innerHTML = "Looking for what? There's no next level!";
             return 1;
         }
-        let y = '<button onClick="nextLevel('+ level[cnt] +')">Begin Next Level</button>';
+        let y = '<button style="width: 200px;height: 40px;background-color: darkred;color: white;font-size: 20px" onClick="nextLevel('+ level[cnt] +')"><b>Begin Next Level</b></button>';
         document.getElementById("nextLevel").innerHTML = y;
     }
     else{

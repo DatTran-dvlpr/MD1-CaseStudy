@@ -1,6 +1,7 @@
 let arr =[];
 let arr2=[];
 let arrvalue =[];
+let mode =true;
 let display ="";
 let safe = true;
 let numb = 8;
@@ -13,10 +14,44 @@ let progressSound;
 function setNumbBlock(x){
     numb = x;
 }
-function customGame(){
-    let a = +prompt('Nhập số "a" để tạo bảng trò chơi với kích cỡ "aXa":');
+function customGameCampaign(){
+    mode=true;
+    let a = +prompt('Nhập số "a" để tạo bảng trò chơi,thể loại campaign, kích cỡ "aXa".');
     setNumbBlock(a);
     restartGame();
+}
+function customGameCustom(){
+    mode=false;
+    let a = +prompt('Nhập số "a" để tạo bảng trò chơi,thể loại custom, kích cỡ "aXa".');
+    setNumbBlock(a);
+    restartGame();
+    let b = +prompt('Nhập số 1,2,3,69 tương ứng với mức độ dễ, trung bình, khó và MỨC DẠI.');
+    let lv='';
+    if(b==1){
+        cnt=0;
+        setGame(level[cnt]);
+        lv ='Easy Mode';
+        document.getElementById("level").innerHTML = lv;
+        return 1;
+    }
+    if(b==2){
+        cnt=1;
+        setGame(level[cnt]);
+        lv ='Normal Mode';
+        document.getElementById("level").innerHTML = lv;
+        return 1;
+    }
+    if(b==3){
+        cnt=2;
+        setGame(level[cnt]);
+        lv ='Hard Mode';
+        document.getElementById("level").innerHTML = lv;
+        return 1;
+    }
+    cnt=level.length-1;
+    setGame(level[cnt]);
+    lv ='What the Hell is this Mode!?';
+    document.getElementById("level").innerHTML = lv;
 }
 function createBoard() {
     for (let i = 0; i < numb; i++) {
@@ -111,16 +146,16 @@ function drawBoard(){
     display+='</table>';
     document.getElementById("display").innerHTML = display;
 }
-function clickFunction(a,b){
-    if(arr2[a][b]==arrvalue[a][b]){
+function clickFunction(i,j){
+    if(arr2[i][j]==arrvalue[i][j]){
         return 1;
     }
     safespot--;
     console.log(safespot);
-    arr[a][b]='<input type="button" value="'+arrvalue[a][b]+'"/>';
+    arr[i][j]='<input type="button" value="'+arrvalue[i][j]+'"/>';
     drawBoard();
-    arr2[a][b] = arrvalue[a][b];
-    if(arrvalue[a][b]== boomIcon){
+    arr2[i][j] = arrvalue[i][j];
+    if(arrvalue[i][j]== boomIcon){
         safe = false;
         checkWin();
         return 1;
@@ -129,20 +164,20 @@ function clickFunction(a,b){
         checkWin();
     }
 }
-function clickAction(a,b){
+function clickAction(i,j){
     playTapSound();
     playProgressing();
     progressSound = setTimeout(playProgressing(),500);
-    clickFunction(a,b);
-    if(arrvalue[a][b]==0){
-        if(a-1>=0&&b-1>=0){clickFunction(a-1,b-1);}
-        if(a-1>=0){clickFunction(a-1,b);}
-        if(a-1>=0&&b+1<numb){clickFunction(a-1,b+1);}
-        if(b-1>=0){clickFunction(a,b-1);}
-        if(b+1<numb){clickFunction(a,b+1);}
-        if(a+1<numb&&b-1>=0){clickFunction(a+1,b-1);}
-        if(a+1<numb){clickFunction(a+1,b);}
-        if(a+1<numb&&b+1<numb){clickFunction(a+1,b+1);}
+    clickFunction(i,j);
+    if(arrvalue[i][j]==0){
+        if(i-1>=0&&j-1>=0){clickFunction(i-1,j-1);}
+        if(i-1>=0){clickFunction(i-1,j);}
+        if(i-1>=0&&j+1<numb){clickFunction(i-1,j+1);}
+        if(j-1>=0){clickFunction(i,j-1);}
+        if(j+1<numb){clickFunction(i,j+1);}
+        if(i+1<numb&&j-1>=0){clickFunction(i+1,j-1);}
+        if(i+1<numb){clickFunction(i+1,j);}
+        if(i+1<numb&&j+1<numb){clickFunction(i+1,j+1);}
     }
 }
 function revealBoard(){
@@ -172,8 +207,11 @@ function checkWin(){
             document.getElementById("nextLevel").innerHTML = "Looking for what? There's no next level!";
             return 1;
         }
-        let y = '<button style="width: 200px;height: 40px;background-color: darkred;color: white;font-size: 20px" onClick="nextLevel('+ level[cnt] +')"><b>Begin Next Level</b></button>';
-        document.getElementById("nextLevel").innerHTML = y;
+        if(mode){
+            let y = '<button style="width: 200px;height: 40px;background-color: darkred;color: white;font-size: 20px" onClick="nextLevel('+ level[cnt] +')"><b>Begin Next Level</b></button>';
+            document.getElementById("nextLevel").innerHTML = y;
+        }
+
     }
     else{
         let a = '<iframe src="https://giphy.com/embed/3o85xnoIXebk3xYx4Q" width="480" height="270" frameBorder="0" className="giphy-embed" allowFullScreen></iframe>'
@@ -192,9 +230,15 @@ function nextLevel(x){
     document.getElementById("gif").innerHTML = '';
 }
 function restartGame(){
-    document.getElementById("gif").innerHTML = '';
-    cnt=0;
-    setGame(level[cnt]);
+    if(mode){
+        cnt=0;
+        document.getElementById("gif").innerHTML = '';
+        setGame(level[cnt]);
+    }
+    else {
+        document.getElementById("gif").innerHTML = '';
+        setGame(level[cnt]);
+    }
 }
 
 setGame(level[cnt]);

@@ -7,8 +7,8 @@ let numb = 8;
 let safespot = numb*numb;
 let level =[9,8.5,8,8,7.5,6.5];
 let cnt =0;
-let boomIcon = '&#127879;'
-
+let boomIcon = '&#127879;';
+let progressSound;
 
 function setNumbBlock(x){
     numb = x;
@@ -49,7 +49,7 @@ function setBoom(x) {
             if (a > x) {
                 arrvalue[i][j] = boomIcon;
                 safespot--;
-                console.log(safespot)
+                console.log(safespot);
             }
             else {
                 arrvalue[i][j] = 0;
@@ -76,7 +76,6 @@ function setNum(i,j){
         if(i+1<numb&&j+1<numb)if(arrvalue[i+1][j+1] == boomIcon){arrvalue[i][j]++;}
     }
 }
-
 function setGame(x){
     display ="";
     safespot = numb*numb;
@@ -131,6 +130,9 @@ function clickFunction(a,b){
     }
 }
 function clickAction(a,b){
+    playTapSound();
+    playProgressing();
+    progressSound = setTimeout(playProgressing(),500);
     clickFunction(a,b);
     if(arrvalue[a][b]==0){
         if(a-1>=0&&b-1>=0){clickFunction(a-1,b-1);}
@@ -168,7 +170,10 @@ function checkWin(){
         let x = '<iframe src="https://giphy.com/embed/yJFeycRK2DB4c" width="480" height="384" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>';
         document.getElementById("gif").innerHTML = x;
         revealBoard();
-       alert("You Win!");
+        stopProgressing();
+        clearTimeout(progressSound);
+        playCompleteSound();
+        alert("You Win!");
         cnt++;
         if(cnt==level.length){
             document.getElementById("nextLevel").innerHTML = "Looking for what? There's no next level!";
@@ -181,6 +186,9 @@ function checkWin(){
         let a = '<iframe src="https://giphy.com/embed/3o85xnoIXebk3xYx4Q" width="480" height="270" frameBorder="0" className="giphy-embed" allowFullScreen></iframe>'
         document.getElementById("gif").innerHTML = a;
         revealBoard();
+        stopProgressing();
+        clearTimeout(progressSound);
+        playFailSound();
         alert("Boom! You're dead!");
     }
     safe = true;
@@ -195,4 +203,5 @@ function restartGame(){
     cnt=0;
     setGame(level[cnt]);
 }
+
 setGame(level[cnt]);

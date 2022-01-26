@@ -1,17 +1,41 @@
-let arr =[];
-let arr2=[];
-let arrvalue =[];
-let mode =true;
-let display ="";
-let safe = true;
-let numb = 8;
-let safespot = numb*numb;
-let level =[9,8.5,8,8,7.5,6.5];
-let cnt =0;
-let boomIcon = '&#127879;';
-let numbOfBoom=0;
-let progressSound;
+let arr =[];//mảng dùng để hiển thị
+let arr2=[];//mảng dùng để check xem khu vực đã bị click hay chưa, nếu đã được click thì hủy clickAction
+let arrvalue =[];//mảng lưu giá trị
+let mode =true;//chế độ Campaign, ngược lại là Custom
+let display ="";//biến dùng để lưu dữ liệu bảng game để in ra
+let safe = true;//biến check win
+let numb = 8;//biến dùng để lưu số lượng cột và dòng (default là 8)
+let safespot = numb*numb;//biến dùng để lưu số vị trí an toàn để click, sẽ bị trừ đi ở công đoạn setBoom và clickAction
+let level =[9,8.5,8,8,7.5,6.5];//biến lưu giá trị tương ứng với độ khó từ dễ đến khó, dùng trong cài đặt tỷ lệ boom
+let cnt =0;//biến đếm index của mảng level
+let boomIcon = '&#127879;';//có thể thay đổi hình dạng quả boom ở đây
+let numbOfBoom=0;//biến lưu số lượng boom trong game, có giá trị trong tính toán Score
 
+
+function setGame(x){
+    display ="";
+    safespot = numb*numb;
+    numbOfBoom=0;
+    let lv = '';
+    if(cnt==5){
+        lv = "Level Hell";
+    }
+    else {
+        lv ="Level "+(cnt+1);
+    }
+    document.getElementById("level").innerHTML = lv;
+    setBoom(x);
+    setNumAfterBoom();
+    createBoard();
+    for (let i = 0; i < numb; i++) {
+        for (let j = 0; j <numb; j++) {
+            if(arrvalue[i][j]%2==1){
+                clickFunction(i,j);
+                return 1;
+            }
+        }
+    }
+}
 function setNumbBlock(x){
     numb = x;
 }
@@ -25,6 +49,18 @@ function createBoard() {
         }
     }
     drawBoard();
+}
+function drawBoard(){
+    display ="<table border='0' cellspacing='0' cellpadding='0'>";
+    for (let i = 0; i < numb; i++) {
+        display+="<tr>";
+        for (let j = 0; j < numb; j++) {
+            display += "<td>"+arr[i][j]+"</td>";
+        }
+        display += "</tr>";
+    }
+    display+='</table>';
+    document.getElementById("display").innerHTML = display;
 }
 function flag(i,j){
     let y = "no"+i+j;
@@ -74,42 +110,7 @@ function setNum(i,j){
         if(i+1<numb&&j+1<numb)if(arrvalue[i+1][j+1] == boomIcon){arrvalue[i][j]++;}
     }
 }
-function setGame(x){
-    display ="";
-    safespot = numb*numb;
-    numbOfBoom=0;
-    let lv = '';
-    if(cnt==5){
-        lv = "Level Hell";
-    }
-    else {
-        lv ="Level "+(cnt+1);
-    }
-    document.getElementById("level").innerHTML = lv;
-    setBoom(x);
-    setNumAfterBoom();
-    createBoard();
-    for (let i = 0; i < numb; i++) {
-        for (let j = 0; j <numb; j++) {
-            if(arrvalue[i][j]%2==1){
-                clickFunction(i,j);
-                return 1;
-            }
-        }
-    }
-}
-function drawBoard(){
-    display ="<table border='0' cellspacing='0' cellpadding='0'>";
-    for (let i = 0; i < numb; i++) {
-        display+="<tr>";
-        for (let j = 0; j < numb; j++) {
-            display += "<td>"+arr[i][j]+"</td>";
-        }
-        display += "</tr>";
-    }
-    display+='</table>';
-    document.getElementById("display").innerHTML = display;
-}
+
 function clickFunction(i,j){
     if(arr2[i][j]==arrvalue[i][j]){
         return 1;
@@ -131,7 +132,6 @@ function clickFunction(i,j){
 function clickAction(i,j){
     playTapSound();
     playProgressing();
-    progressSound = setTimeout(playProgressing(),500);
     clickFunction(i,j);
     if(arrvalue[i][j]==0){
         if(i-1>=0&&j-1>=0){clickFunction(i-1,j-1);}
@@ -163,22 +163,28 @@ function checkWin(){
         document.getElementById("gif").innerHTML = x;
         revealBoard();
         stopProgressing();
-        clearTimeout(progressSound);
+        playerName.CampaignGame.updateScoreCam(numbOfBoom);
+        let lv =document.getElementById("level").innerHTML;
+        playerName.CampaignGame.updateLevel(lv);
         playCompleteSound();
         alert("You Win!");
 
         cnt++;
         if(cnt==level.length){
-            playerName.CampaignGame.updateScoreCam(numbOfBoom);
             playerName.CampaignGame.updateFinalScoreCam();
-            displayScore();
+            displayScoreEnd();
             document.getElementById("nextLevel").innerHTML = "Looking for what? There's no next level!";
             return 1;
         }
         if(mode){
-            playerName.CampaignGame.updateScoreCam(numbOfBoom);
+            displayScoreInProcess();
             let y = '<button style="width: 200px;height: 40px;background-color: darkred;color: white;font-size: 20px" onClick="nextLevel('+ level[cnt] +')"><b>Begin Next Level</b></button>';
             document.getElementById("nextLevel").innerHTML = y;
+        }
+        else {
+            playerName.CustomGame.updateScoreCus(numbOfBoom);
+            playerName.CustomGame.updateFinalScoreCus();
+            displayScoreEnd();
         }
 
     }
@@ -187,18 +193,42 @@ function checkWin(){
         document.getElementById("gif").innerHTML = a;
         revealBoard();
         stopProgressing();
-        clearTimeout(progressSound);
         playFailSound();
-        alert("Boom! You're dead!");
+        displayScoreEnd();
+        alert("YOU DIE");
     }
     safe = true;
 }
-function displayScore(){
+
+function displayScoreInProcess(){
     if(mode){
-        display ="Player: "+playerName+"<br/>Mode: Campaign-"+numb+'x'+numb+'<br/>Highscore: '+
-            playerName.CampaignGame.scoreCampaign;
+        let a = 'Score: '+ playerName.CampaignGame.subScoreCam;
+        document.getElementById("score").innerHTML = a;
+    }
+    else {
+        let b = 'Score: '+ playerName.CustomGame.subScoreCus;
+        document.getElementById("score").innerHTML = b;
     }
 }
+function displayScoreEnd(){
+    if(mode){
+        playerName.CampaignGame.updateFinalScoreCam();
+        let x ="Player: "+playerName.name+"<br/>Mode: Campaign-"+numb+'x'+numb+'<br/>Score: '+
+            playerName.CampaignGame.level+'; point: '+playerName.CampaignGame.subScoreCam+
+            '<br/>Highscore: '+ playerName.CampaignGame.scoreCampaign;
+        document.getElementById("score").innerHTML=x;
+        playerName.CampaignGame.subScoreCam =0;
+    }
+    else {
+        playerName.CustomGame.updateFinalScoreCus();
+        let x ="Player: "+playerName.name+"<br/>Mode: Custom-"+numb+'x'+numb+'<br/>Score: '+
+            playerName.CustomGame.level+'; point: '+playerName.CustomGame.subScoreCus+
+            '<br/>Highscore: '+ playerName.CustomGame.scoreCustom;
+        document.getElementById("score").innerHTML=x;
+        playerName.CustomGame.subScoreCus =0;
+    }
+}
+
 function nextLevel(x){
     setGame(x);
     document.getElementById("nextLevel").innerHTML = '';
@@ -209,9 +239,13 @@ function restartGame(){
         cnt=0;
         document.getElementById("gif").innerHTML = '';
         setGame(level[cnt]);
+        playerName.CampaignGame.subScoreCam =0;
+        displayScoreInProcess();
     }
     else {
         document.getElementById("gif").innerHTML = '';
         setGame(level[cnt]);
+        displayLevelCus();
+        displayScoreInProcess();
     }
 }

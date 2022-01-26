@@ -1,9 +1,10 @@
 class CampaignGame{
-    constructor(numBlock,level,scoreCampaign,subScore) {
+    constructor(player,numBlock,level,scoreCampaign,subScoreCam) {
+        this.player=player;
         this.numBlock=numBlock;
         this.level=level;
         this.scoreCampaign=scoreCampaign;
-        this.subScore=subScore;
+        this.subScoreCam=subScoreCam;
     }
     setNumBlockCam(x){
         this.numBlock =x;
@@ -12,20 +13,23 @@ class CampaignGame{
         this.level=x;
     }
     updateFinalScoreCam(){
-        if(this.scoreCampaign<this.subScore){
-            this.scoreCampaign=this.subScore;
+        if(this.scoreCampaign<this.subScoreCam){
+            this.scoreCampaign=this.subScoreCam;
         }
-        this.subScore=0;
     }
     updateScoreCam(x){
-        this.subScore += x;
+        this.subScoreCam += x;
     }
 }
 function customGameCampaign(){
     mode=true;
-    setPlayerInfo();
-    let a = +prompt('Nhập số "a" để tạo bảng trò chơi,thể loại campaign, kích cỡ "aXa".');
+    let a = +prompt('Nhập số "a"<16 để tạo bảng trò chơi,thể loại campaign, kích cỡ "aXa".');
+    if(a<16){
     playerName.CampaignGame.setNumBlockCam(a);
     setNumbBlock(a);
     restartGame();
+    return 1;
+    }
+    alert("Không hợp lệ, mời nhập lại!");
+    customGameCampaign();
 }

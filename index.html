@@ -10,20 +10,28 @@
             font-size: 30px;
             text-align: center;
         }
+        button {
+            width: 150px;
+            height: 30px;
+            background-color: blue;
+            color: white;
+        }
     </style>
 
 </head>
 <body>
+<div class="panel">
 <h1>Minesweeper Shoppee</h1>
 <h3 id="level"></h3>
-<span id="score"></span>
-<div id="display"></div>
+    <button onclick="customGameCampaign()">SelectCampaign</button>
+    <button onclick="customGameCustom()">GameCustom</button><br/><br/>
+<div id="score"></div>
+<div class="panelBoard" id="display"></div>
 <br/>
 <div id="nextLevel"></div>
 <button onclick="restartGame()">RestartGame</button>
-<button onclick="customGameCampaign()">SelectCampaign</button>
-<button onclick="customGameCustom()">GameCustom</button>
 <div id="gif"></div>
+</div>
 <script src="ClassPlayer.js"></script>
 <script src="ClassCustom.js"></script>
 <script src="ClassCampaign.js"></script>

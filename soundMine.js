@@ -26,7 +26,7 @@ function playCompleteSound(){
     let a=Math.floor(Math.random()*3);
     completeSound[a].play();
 }
-let countTap =0;
+let countTap =0;//thay đổi tapSound effect
 function playTapSound(){
     if(countTap<3){
         tapSound[countTap].play();
@@ -47,3 +47,4 @@ function stopProgressing(){
 function playFailSound(){
     failSound.play();
 }
+

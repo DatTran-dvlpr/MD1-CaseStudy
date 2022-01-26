@@ -18,8 +18,5 @@ getScoreCustom(){
         s3=this.CustomGame.scoreCustom;
 }
 }
-let s1,s2,s3,playerName;
-function setPlayerInfo() {
-    playerName = prompt("Nhập tên người chơi.");
-    playerName = new Player(playerName,0,0);
-}
+let s1,s2,s3;
+

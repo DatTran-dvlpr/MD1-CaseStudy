@@ -170,13 +170,8 @@ function checkWin(){
         alert("You Win!");
 
         cnt++;
-        if(cnt==level.length){
+        if(cnt==level.length&&mode){
             playerName.CampaignGame.updateFinalScoreCam();
-            console.log(numbOfBoom);
-            playerName.CustomGame.updateScoreCus(numbOfBoom);
-            console.log(playerName.CustomGame.subScoreCus);
-            playerName.CustomGame.updateFinalScoreCus();
-            console.log(playerName.CustomGame.scoreCustom);
             displayScoreEnd();
             document.getElementById("nextLevel").innerHTML = "Looking for what? There's no next level!";
             safe = true;
@@ -186,6 +181,12 @@ function checkWin(){
             displayScoreInProcess();
             let y = '<button style="width: 200px;height: 40px;background-color: darkred;color: white;font-size: 20px" onClick="nextLevel('+ level[cnt] +')"><b>Begin Next Level</b></button>';
             document.getElementById("nextLevel").innerHTML = y;
+        }
+        else {
+            playerName.CustomGame.updateScoreCus(numbOfBoom);
+            playerName.CustomGame.updateFinalScoreCus();
+            console.log(playerName.CustomGame.scoreCustom);
+            displayScoreEnd();
         }
     }
     else{

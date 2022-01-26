@@ -172,8 +172,14 @@ function checkWin(){
         cnt++;
         if(cnt==level.length){
             playerName.CampaignGame.updateFinalScoreCam();
+            console.log(numbOfBoom);
+            playerName.CustomGame.updateScoreCus(numbOfBoom);
+            console.log(playerName.CustomGame.subScoreCus);
+            playerName.CustomGame.updateFinalScoreCus();
+            console.log(playerName.CustomGame.scoreCustom);
             displayScoreEnd();
             document.getElementById("nextLevel").innerHTML = "Looking for what? There's no next level!";
+            safe = true;
             return 1;
         }
         if(mode){
@@ -181,12 +187,6 @@ function checkWin(){
             let y = '<button style="width: 200px;height: 40px;background-color: darkred;color: white;font-size: 20px" onClick="nextLevel('+ level[cnt] +')"><b>Begin Next Level</b></button>';
             document.getElementById("nextLevel").innerHTML = y;
         }
-        else {
-            playerName.CustomGame.updateScoreCus(numbOfBoom);
-            playerName.CustomGame.updateFinalScoreCus();
-            displayScoreEnd();
-        }
-
     }
     else{
         let a = '<iframe src="https://giphy.com/embed/3o85xnoIXebk3xYx4Q" width="480" height="270" frameBorder="0" className="giphy-embed" allowFullScreen></iframe>'
